@@ -3,3 +3,18 @@
 
 recfun/*
 !recfun/src
+
+funsets/*
+!funsets/src
+
+objsets/*
+!objsets/src
+
+patmat/*
+!patmat/src
+
+forcomp/*
+!forcomp/src
+
+streams/*
+!streams/src
