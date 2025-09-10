@@ -4,6 +4,7 @@ import org.scalatest.FunSuite
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import javax.lang.model.`type`.UnionType
 
 /**
  * This class is a test suite for the methods in object FunSets. To run
@@ -86,7 +87,7 @@ class FunSetSuite extends FunSuite {
    * Once you finish your implementation of "singletonSet", exchange the
    * function "ignore" by "test".
    */
-  ignore("singletonSet(1) contains 1") {
+  test("singletonSet(1) contains 1") {
     
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
@@ -101,12 +102,100 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  ignore("union contains all elements") {
+  test("union contains all elements") {
     new TestSets {
       val s = union(s1, s2)
+      print("Union of {1}, {2} : ")
+      printSet(s)
+
       assert(contains(s, 1), "Union 1")
       assert(contains(s, 2), "Union 2")
       assert(!contains(s, 3), "Union 3")
+    }
+  }
+
+  test("intersect test") {
+    new TestSets {
+      val s = intersect(s1, s2)
+      print("Intersect of {1}, {2} : ")
+      printSet(s)
+      val ss = intersect(union(s1, s2), s1)
+      print("Intersect of {1, 2}, {1} : ")
+      printSet(ss)
+
+      assert(!contains(s, 1))
+      assert(!contains(s, 2))
+      assert(contains(ss, 1))
+      assert(!contains(ss, 2))
+    }
+  }
+
+  test("diff test") {
+    new TestSets {
+      val s = diff(s1, s2)
+      print("Diff of {1}, {2} : ")
+      printSet(s)
+
+      assert(contains(s, 1))
+      assert(!contains(s, 2))
+
+      val ss = diff(s2, union(s1, s2))
+      print("Diff of {2}, {1, 2} : ")
+      printSet(ss)
+
+      assert(!contains(ss, 1))
+      assert(!contains(ss, 2))
+
+      val sss = diff(s1, s1)
+      print("Diff of {1}, {1} : ")
+      printSet(sss)
+
+      assert(!contains(sss, 1))
+      assert(!contains(sss, 2))
+    }
+  }
+
+  test("filter test") {
+    new TestSets {
+      val s = filter(union(s1, union(s2, s3)), x => x <= 2)
+      print("Filter {1, 2, 3}, with x => x <= 2 : ")
+      printSet(s)
+
+      assert(contains(s, 1))
+      assert(contains(s, 2))
+      assert(!contains(s, 3))
+    }
+  }
+
+  test("forall test") {
+    new TestSets {
+      val s = union(s1, union(s2, s3))
+
+      assert(forall(s, x => x <= 3))
+      assert(!forall(s, x => x <= 2))
+    }
+  }
+
+  test("exists test") {
+    new TestSets {
+      val s = union(s1, union(s2, s3))
+
+      assert(exists(s, x => x == 1))
+      assert(exists(s, x => x >= 3))
+      assert(!exists(s, x => x < 1))
+    }
+  }
+
+  test("square map test") {
+    new TestSets {
+      val squareSet = map(union(union(s1, s2), s3), x => x * x)
+      print("Map x => x * x to {1, 2, 3} : ")
+      printSet(squareSet)
+
+      assert(contains(squareSet, 1))
+      assert(!contains(squareSet, 2))
+      assert(contains(squareSet, 4))
+      assert(contains(squareSet, 9))
     }
   }
 }
