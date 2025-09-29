@@ -44,4 +44,27 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+
+  test("decode and encode \"This is The long long TexT\"") {
+    val text = "This is The long long Text"
+    val charList = string2Chars(text)
+    val codeTree = createCodeTree(charList)
+    val encodedBits = encode(codeTree)(charList)
+    val decodedText = decode(codeTree, encodedBits)
+    assert(charList === decodedText)
+  }
+
+  test("quickEncode is equal to encode") {
+    val text = "vfdoijioFIONFJIOfDMIOmklvfdsmiojfvdklmzvvmilAIJVDSMILrsdjiodsvmlkVSDSVNIOmklfvzs"
+    val charList = string2Chars(text)
+    val codeTree = createCodeTree(charList)
+    val encodedBits = encode(codeTree)(charList)
+    val quickEncodedBits = quickEncode(codeTree)(charList)
+
+    assert(encodedBits === quickEncodedBits)
+  }
+
+  test("get secret message") {
+    println(s"""Secret Message is "${decodedSecret.mkString}"!!""")
+  }
 }
